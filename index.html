@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Матрица Судьбы</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 10px;
+      margin: 10px;
+    }
+    button {
+      background-color: #5a4fcf;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #483dc0;
+    }
+    svg {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+    }
+    .point {
+      fill: #fff;
+      stroke: #aaa;
+      stroke-width: 1.2;
+    }
+    .line {
+      stroke: #ccc;
+      stroke-width: 1;
+    }
+    .value {
+      font-size: 14px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      fill: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Матрица Судьбы</h1>
+  <input type="date" id="birthdate" />
+  <button onclick="calculate()">Рассчитать</button>
+  <svg viewBox="0 0 800 900">
+    <g id="lines"></g>
+    <g id="circles"></g>
+    <g id="values"></g>
+  </svg>
+
+  <script>
+    const points = {
+      A: [100, 400], Q: [160, 400], J: [220, 400], U: [280, 400], E: [400, 400],
+      L: [520, 400], S: [580, 400], C: [640, 400], F: [160, 240], G: [580, 240],
+      I: [160, 560], H: [580, 560], D: [400, 700], T: [400, 640], M: [400, 580],
+      O: [360, 520], N: [400, 520], P: [440, 460], B: [400, 100], R: [400, 160],
+      K: [400, 220], V: [400, 280]
+    };
+
+    const connections = [
+      ["A","Q"],["Q","J"],["J","U"],["U","E"],["E","L"],["L","S"],["S","C"],
+      ["A","F"],["F","B"],["B","G"],["G","C"],
+      ["A","I"],["I","D"],["D","H"],["H","C"],
+      ["B","R"],["R","K"],["K","V"],["V","E"],
+      ["E","M"],["M","T"],["T","D"],
+      ["L","P"],["P","N"],["N","O"],["O","M"],
+      ["J","M"],["L","M"]
+    ];
+
+    const order = [
+      "A","B","C","D","E","F","G","H","I","J","K","L","M",
+      "N","O","P","Q","R","S","T","U","V"
+    ];
+
+    const lineGroup = document.getElementById("lines");
+    connections.forEach(([a, b]) => {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("class", "line");
+      line.setAttribute("x1", points[a][0]);
+      line.setAttribute("y1", points[a][1]);
+      line.setAttribute("x2", points[b][0]);
+      line.setAttribute("y2", points[b][1]);
+      lineGroup.appendChild(line);
+    });
+
+    const circleGroup = document.getElementById("circles");
+    order.forEach(key => {
+      const [x, y] = points[key];
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("class", "point");
+      circle.setAttribute("cx", x);
+      circle.setAttribute("cy", y);
+      circle.setAttribute("r", 18);
+      circleGroup.appendChild(circle);
+    });
+
+    function to22(n) {
+      while (n > 22) n = n.toString().split('').reduce((a,b)=>+a + +b, 0);
+      return n;
+    }
+
+    function calculate() {
+      const input = document.getElementById("birthdate").value;
+      if (!input) return alert("Введите дату рождения!");
+      const d = new Date(input);
+      const day = d.getDate(), month = d.getMonth() + 1, year = d.getFullYear();
+      const A = day <= 22 ? day : to22(day);
+      const B = month;
+      const C = to22([...year.toString()].reduce((a,b)=>+a + +b));
+      const D = to22(A + B + C);
+      const E = to22(A + B + C + D);
+      const F = to22(A + B), G = to22(B + C), H = to22(C + D), I = to22(D + A);
+      const J = to22(A + E), K = to22(B + E), L = to22(C + E), M = to22(D + E);
+      const N = to22(M + L), O = to22(M + N), P = to22(N + L);
+      const Q = to22(A + J), R = to22(B + K), S = to22(C + L), T = to22(D + M);
+      const U = to22(J + E), V = to22(K + E);
+
+      const values = { A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V };
+      const valueGroup = document.getElementById("values");
+      valueGroup.innerHTML = "";
+
+      order.forEach(key => {
+        const [x, y] = points[key];
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("class", "value");
+        text.setAttribute("x", x);
+        text.setAttribute("y", y);
+        text.textContent = values[key];
+        valueGroup.appendChild(text);
+      });
+    }
+  </script>
+</body>
+</html>
