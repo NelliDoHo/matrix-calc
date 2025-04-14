@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Матрица Судьбы</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    button {
+      background-color: #5a4fcf;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #483dc0;
+    }
+    #matrix {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 10px;
+      justify-items: center;
+      align-items: center;
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    .cell {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      width: 60px;
+      height: 60px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .label {
+      font-size: 12px;
+      color: #777;
+    }
+    .value {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Калькулятор Матрицы Судьбы</h1>
+  <input type="date" id="birthdate">
+  <button onclick="calculateMatrix()">Рассчитать</button>
+
+  <div id="matrix"></div>
+
+  <script>
+    function to22(num) {
+      while (num > 22) {
+        num = num.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+      }
+      return num;
+    }
+
+    function calculateMatrix() {
+      const dateStr = document.getElementById("birthdate").value;
+      if (!dateStr) {
+        document.getElementById("matrix").innerHTML = "Введите дату рождения!";
+        return;
+      }
+
+      const date = new Date(dateStr);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const A = day <= 22 ? day : to22(day);
+      const B = month;
+      const C = to22(year.toString().split('').reduce((a, b) => a + parseInt(b), 0));
+      const D = to22(A + B + C);
+      const E = to22(A + B + C + D);
+
+      const F = to22(A + B);
+      const G = to22(B + C);
+      const H = to22(C + D);
+      const I = to22(D + A);
+      const J = to22(A + E);
+      const K = to22(B + E);
+      const L = to22(C + E);
+      const M = to22(D + E);
+      const N = to22(M + L);
+      const O = to22(M + N);
+      const P = to22(L + N);
+      const Q = to22(A + J);
+      const R = to22(B + K);
+      const S = to22(C + L);
+      const T = to22(D + M);
+
+      const matrixHTML = `
+        <div id="matrix">
+          <div class="cell"><div class="label">A</div><div class="value">${A}</div></div>
+          <div class="cell"><div class="label">B</div><div class="value">${B}</div></div>
+          <div class="cell"><div class="label">C</div><div class="value">${C}</div></div>
+          <div class="cell"><div class="label">D</div><div class="value">${D}</div></div>
+          <div class="cell"><div class="label">E</div><div class="value">${E}</div></div>
+          <div class="cell"><div class="label">F</div><div class="value">${F}</div></div>
+          <div class="cell"><div class="label">G</div><div class="value">${G}</div></div>
+          <div class="cell"><div class="label">H</div><div class="value">${H}</div></div>
+          <div class="cell"><div class="label">I</div><div class="value">${I}</div></div>
+          <div class="cell"><div class="label">J</div><div class="value">${J}</div></div>
+          <div class="cell"><div class="label">K</div><div class="value">${K}</div></div>
+          <div class="cell"><div class="label">L</div><div class="value">${L}</div></div>
+          <div class="cell"><div class="label">M</div><div class="value">${M}</div></div>
+          <div class="cell"><div class="label">N</div><div class="value">${N}</div></div>
+          <div class="cell"><div class="label">O</div><div class="value">${O}</div></div>
+          <div class="cell"><div class="label">P</div><div class="value">${P}</div></div>
+          <div class="cell"><div class="label">Q</div><div class="value">${Q}</div></div>
+          <div class="cell"><div class="label">R</div><div class="value">${R}</div></div>
+          <div class="cell"><div class="label">S</div><div class="value">${S}</div></div>
+          <div class="cell"><div class="label">T</div><div class="value">${T}</div></div>
+        </div>
+      `;
+
+      document.getElementById("matrix").innerHTML = matrixHTML;
+    }
+  </script>
+</body>
+</html>
