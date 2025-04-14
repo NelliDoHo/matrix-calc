@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор Матрицы Судьбы</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #222;
+    }
+    svg {
+      margin-top: 30px;
+    }
+    .point {
+      font-size: 14px;
+      text-anchor: middle;
+      dominant-baseline: central;
+      fill: #000;
+    }
+    .circle {
+      stroke: black;
+      stroke-width: 1;
+      fill: white;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 15px;
+      font-size: 16px;
+      width: 250px;
+    }
+    button {
+      background-color: #000;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>Калькулятор Матрицы Судьбы</h1>
+  <input type="date" id="birthdate">
+  <button onclick="calculateMatrix()">Рассчитать</button>
+
+  <svg width="400" height="500" viewBox="0 0 400 500">
+    <!-- Координаты для 22 точек -->
+    <circle class="circle" cx="50" cy="250" r="20" />
+<circle class="circle" cx="200" cy="50" r="20" />
+<circle class="circle" cx="350" cy="250" r="20" />
+<circle class="circle" cx="200" cy="450" r="20" />
+<circle class="circle" cx="200" cy="250" r="20" />
+<circle class="circle" cx="100" cy="150" r="20" />
+<circle class="circle" cx="300" cy="150" r="20" />
+<circle class="circle" cx="300" cy="350" r="20" />
+<circle class="circle" cx="100" cy="350" r="20" />
+<circle class="circle" cx="125" cy="250" r="20" />
+<circle class="circle" cx="200" cy="125" r="20" />
+<circle class="circle" cx="275" cy="250" r="20" />
+<circle class="circle" cx="200" cy="325" r="20" />
+<circle class="circle" cx="245" cy="280" r="20" />
+<circle class="circle" cx="270" cy="305" r="20" />
+<circle class="circle" cx="295" cy="330" r="20" />
+<circle class="circle" cx="75" cy="190" r="20" />
+<circle class="circle" cx="160" cy="100" r="20" />
+<circle class="circle" cx="240" cy="100" r="20" />
+<circle class="circle" cx="200" cy="375" r="20" />
+<circle class="circle" cx="165" cy="250" r="20" />
+<circle class="circle" cx="200" cy="165" r="20" />
+
+  </svg>
+
+  <script>
+    const pointCoords = {
+      A: [50, 250], B: [200, 50], C: [350, 250], D: [200, 450], E: [200, 250],
+      F: [100, 150], G: [300, 150], H: [300, 350], I: [100, 350],
+      J: [125, 250], K: [200, 125], L: [275, 250], M: [200, 325],
+      N: [245, 280], O: [270, 305], P: [295, 330],
+      Q: [75, 190], R: [160, 100], S: [240, 100], T: [200, 375],
+      U: [165, 250], V: [200, 165]
+    };
+
+    function to22(num) {
+      while (num > 22) {
+        num = num.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+      }
+      return num;
+    }
+
+    function drawPoints(values) {
+      let svg = "";
+      let keys = Object.keys(pointCoords);
+      for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        let [x, y] = pointCoords[key];
+        svg += `<circle class="circle" cx="${x}" cy="${y}" r="20" />`;
+        svg += `<text class="point" x="${x}" y="${y}">${values[key] || ""}</text>`;
+      }
+      document.querySelector("svg").innerHTML = svg;
+    }
+
+    function calculateMatrix() {
+      const dateStr = document.getElementById("birthdate").value;
+      if (!dateStr) {
+        alert("Введите дату рождения!");
+        return;
+      }
+
+      const date = new Date(dateStr);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const A = day <= 22 ? day : to22(day);
+      const B = month;
+      const C = to22(year.toString().split('').reduce((a, b) => a + parseInt(b), 0));
+      const D = to22(A + B + C);
+      const E = to22(A + B + C + D);
+
+      const F = to22(A + B);
+      const G = to22(B + C);
+      const H = to22(C + D);
+      const I = to22(D + A);
+      const J = to22(A + E);
+      const K = to22(B + E);
+      const L = to22(C + E);
+      const M = to22(D + E);
+      const N = to22(M + L);
+      const O = to22(M + N);
+      const P = to22(N + L);
+      const R = to22(B + K);
+      const S = to22(C + L);
+      const T = to22(D + M);
+      const Q = to22(A + J);
+      const U = to22(J + E);
+      const V = to22(K + E);
+
+      const values = {A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V};
+      drawPoints(values);
+    }
+
+    drawPoints({});
+  </script>
+</body>
+</html>
