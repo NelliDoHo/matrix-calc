@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор Матрицы Судьбы</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .matrix-container {
+      position: relative;
+      width: 400px;
+      height: 530px;
+      margin-top: 30px;
+    }
+    .point {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #888;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      text-align: center;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      font-size: 14px;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 15px;
+      font-size: 16px;
+      width: 250px;
+    }
+    button {
+      background-color: #5a4fcf;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #483dc0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Калькулятор Матрицы Судьбы</h1>
+  <input type="date" id="birthdate">
+  <button onclick="calculateMatrix()">Рассчитать</button>
+
+  <div class="matrix-container" id="matrix">
+    <div class="point" id="A" style="top: 200px; left: 20px;">A</div>
+    <div class="point" id="B" style="top: 50px; left: 160px;">B</div>
+    <div class="point" id="C" style="top: 200px; left: 300px;">C</div>
+    <div class="point" id="D" style="top: 350px; left: 160px;">D</div>
+    <div class="point" id="E" style="top: 200px; left: 160px;">E</div>
+
+    <div class="point" id="F" style="top: 130px; left: 90px;">F</div>
+    <div class="point" id="G" style="top: 130px; left: 230px;">G</div>
+    <div class="point" id="H" style="top: 275px; left: 230px;">H</div>
+    <div class="point" id="I" style="top: 275px; left: 90px;">I</div>
+
+    <div class="point" id="J" style="top: 165px; left: 90px;">J</div>
+    <div class="point" id="K" style="top: 115px; left: 160px;">K</div>
+    <div class="point" id="L" style="top: 165px; left: 230px;">L</div>
+    <div class="point" id="M" style="top: 240px; left: 160px;">M</div>
+
+    <div class="point" id="N" style="top: 230px; left: 270px;">N</div>
+    <div class="point" id="O" style="top: 270px; left: 270px;">O</div>
+    <div class="point" id="P" style="top: 310px; left: 270px;">P</div>
+
+    <div class="point" id="Q" style="top: 130px; left: 20px;">Q</div>
+    <div class="point" id="R" style="top: 80px; left: 110px;">R</div>
+    <div class="point" id="S" style="top: 80px; left: 210px;">S</div>
+    <div class="point" id="T" style="top: 310px; left: 160px;">T</div>
+
+    <div class="point" id="U" style="top: 215px; left: 115px;">U</div>
+    <div class="point" id="V" style="top: 140px; left: 190px;">V</div>
+  </div>
+
+  <script>
+    function to22(num) {
+      while (num > 22) {
+        num = num.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+      }
+      return num;
+    }
+
+    function calculateMatrix() {
+      const dateStr = document.getElementById("birthdate").value;
+      if (!dateStr) {
+        alert("Введите дату рождения!");
+        return;
+      }
+
+      const date = new Date(dateStr);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const A = day <= 22 ? day : to22(day);
+      const B = month;
+      const C = to22(year.toString().split('').reduce((a, b) => a + parseInt(b), 0));
+      const D = to22(A + B + C);
+      const E = to22(A + B + C + D);
+
+      const F = to22(A + B);
+      const G = to22(B + C);
+      const H = to22(C + D);
+      const I = to22(D + A);
+      const J = to22(A + E);
+      const K = to22(B + E);
+      const L = to22(C + E);
+      const M = to22(D + E);
+      const N = to22(M + L);
+      const O = to22(M + N);
+      const P = to22(N + L);
+      const R = to22(B + K);
+      const S = to22(C + L);
+      const T = to22(D + M);
+      const Q = to22(A + J);
+      const U = to22(J + E);
+      const V = to22(K + E);
+
+      const points = {A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V};
+
+      for (const key in points) {
+        document.getElementById(key).innerText = key + ": " + points[key];
+      }
+    }
+  </script>
+</body>
+</html>
